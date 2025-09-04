@@ -1,10 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Portfolio</title>
-  <meta name="description" content="A clean, responsive one-page portfolio built with only HTML & CSS."/>
+  <title>Daud — Full Stack Data Scientist</title>
+  <meta name="description" content="Daud — Full Stack Data Scientist, ML Engineer, and Web Developer. Portfolio."/>
+  <!-- Font: system + Inter fallback -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/xxxxxxxxxx.js" crossorigin="anonymous"></script>
   <style>
     :root{
       --bg: #0b0d10;
@@ -15,6 +20,9 @@
       --brand-2: #8bd4ff;
       --ring: rgba(91,156,255,.35);
       --shadow: 0 10px 25px rgba(0,0,0,.25);
+      --glass: rgba(255,255,255,0.02);
+      --radius-lg: 18px;
+      --maxw: 1100px;
     }
     @media (prefers-color-scheme: light){
       :root{
@@ -26,306 +34,503 @@
         --brand-2: #38bdf8;
         --ring: rgba(37,99,235,.2);
         --shadow: 0 10px 25px rgba(2,6,23,.08);
+        --glass: rgba(2,6,23,0.02);
       }
     }
 
-    /* Base */
+    /* Reset & base */
     *{ box-sizing: border-box; }
     html,body{ height:100%; }
     body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text); background: radial-gradient(1200px 600px at 80% -10%, rgba(91,156,255,.12), transparent 60%),
-               radial-gradient(900px 500px at 10% 0%, rgba(139,212,255,.12), transparent 60%),
-               var(--bg);
-      line-height:1.6;
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(91,156,255,.12), transparent 60%),
+        radial-gradient(900px 500px at 10% 0%, rgba(139,212,255,.12), transparent 60%),
+        var(--bg);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+      padding-bottom:4rem;
     }
     img{ max-width:100%; display:block; height:auto; }
-    a{ color: inherit; text-decoration: none; }
-    .container{ width:min(1100px, 92%); margin-inline:auto; }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width: min(var(--maxw), 92%); margin-inline:auto; }
 
     /* Header */
     header{
-      position: sticky; top:0; z-index: 50; backdrop-filter: saturate(180%) blur(8px);
-      background: color-mix(in oklab, var(--bg), transparent 30%);
-      border-bottom: 1px solid color-mix(in oklab, var(--text), transparent 90%);
+      position: sticky; top:0; z-index:60;
+      backdrop-filter: blur(8px) saturate(140%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));
+      border-bottom: 1px solid color-mix(in oklab, var(--text), transparent 92%);
     }
-    .nav{ display:flex; align-items:center; justify-content:space-between; padding:.9rem 0; }
-    .brand{ font-weight:800; letter-spacing:.3px; font-size:1.05rem; }
-    .nav a{ opacity:.9; }
-    .nav a:hover{ opacity:1; }
-    .nav ul{ list-style:none; display:flex; gap:1.2rem; padding:0; margin:0; }
+    .nav{ display:flex; align-items:center; justify-content:space-between; padding:.85rem 0; gap:1rem; }
+    .brand{ font-weight:800; letter-spacing:.2px; font-size:1.05rem; display:flex; gap:.6rem; align-items:center; }
+    .brand .logo {
+      width:36px; height:36px; border-radius:10px; overflow:hidden; flex:0 0 36px;
+      border:1px solid color-mix(in oklab, var(--brand), transparent 60%);
+      display:inline-grid; place-items:center; background: linear-gradient(180deg, var(--panel), color-mix(in oklab,var(--panel),white 3%));
+    }
+    nav.primary ul{ list-style:none; display:flex; gap:1.25rem; padding:0; margin:0; align-items:center; }
+    nav.primary a{ font-weight:500; opacity:.92; padding:.3rem .45rem; border-radius:10px; }
+    nav.primary a:hover{ background: rgba(255,255,255,0.02); opacity:1; }
+    .cta-mini { display:flex; gap:.5rem; align-items:center; }
+    .btn-sm { padding:.45rem .7rem; border-radius:12px; border:1px solid color-mix(in oklab,var(--text),transparent 86%); background:var(--panel); font-weight:600; }
+    .btn-sm.primary{ background: linear-gradient(180deg,var(--brand),var(--brand-2)); color:#001022; border-color:transparent; box-shadow: 0 6px 20px rgba(91,156,255,.12); }
+
+    /* Mobile nav */
+    .mobile-toggle{ display:none; background:transparent; border:0; color:var(--muted); font-size:1.1rem; }
+    @media (max-width:760px){ .mobile-toggle{ display:inline-block } nav.primary{ display:none } }
 
     /* Hero */
-    .hero{ display:grid; grid-template-columns: 1.1fr .9fr; gap:2.5rem; align-items:center; padding: clamp(2rem, 5vw, 4rem) 0 2rem; }
-    .hero .eyebrow{ color: var(--muted); text-transform:uppercase; letter-spacing:.16em; font-size:.78rem; }
-    .hero h1{ font-size: clamp(2rem, 6vw, 3.6rem); line-height:1.1; margin:.4rem 0 1rem; }
-    .hero p{ color: var(--muted); font-size: clamp(1rem, 2.2vw, 1.1rem); }
-    .cta{ display:flex; gap:.8rem; margin-top:1.5rem; flex-wrap:wrap; }
-    .btn{ display:inline-flex; align-items:center; gap:.5rem; padding:.75rem 1rem; border-radius:14px; border:1px solid color-mix(in oklab, var(--text), transparent 86%); box-shadow: var(--shadow);
-      background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 2%), var(--panel));
+    .hero{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:2.5rem;
+      align-items:center;
+      padding: clamp(2rem, 5vw, 4rem) 0 2rem;
     }
-    .btn.primary{ background: linear-gradient(180deg, var(--brand), var(--brand-2)); border-color: transparent; color:#001022; font-weight:700; }
-    .btn:hover{ transform: translateY(-1px); }
+    .eyebrow{ color:var(--muted); text-transform:uppercase; letter-spacing:.16em; font-size:.78rem; }
+    h1{ font-size: clamp(2rem, 6vw, 3.4rem); line-height:1.05; margin:.4rem 0 .6rem; font-weight:800; }
+    .hero p.lead{ color:var(--muted); font-size:1.02rem; max-width:54ch; }
+    .cta{ display:flex; gap:.8rem; margin-top:1.5rem; flex-wrap:wrap; }
+    .btn{ display:inline-flex; align-items:center; gap:.6rem; padding:.75rem 1.05rem; border-radius:14px; border:1px solid color-mix(in oklab, var(--text), transparent 86%); box-shadow: var(--shadow);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 2%), var(--panel)); cursor:pointer; }
+    .btn.primary{ background: linear-gradient(180deg, var(--brand), var(--brand-2)); border-color:transparent; color:#001022; font-weight:700; }
 
-    .hero-card{ background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 3%), var(--panel)); border-radius:22px; padding:1.2rem; border:1px solid color-mix(in oklab, var(--text), transparent 88%); box-shadow: var(--shadow); }
-    .avatar{ aspect-ratio:1/1; border-radius:18px; overflow:hidden; border:1px solid color-mix(in oklab, var(--brand), transparent 50%); }
-    .badge{ display:inline-block; padding:.35rem .6rem; border-radius:999px; font-size:.78rem; background: color-mix(in oklab, var(--brand), transparent 80%); border:1px solid color-mix(in oklab, var(--brand), transparent 60%); color: var(--text); }
+    .hero-card{
+      background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 3%), var(--panel));
+      border-radius: var(--radius-lg); padding:1.2rem; border:1px solid color-mix(in oklab, var(--text), transparent 88%); box-shadow: var(--shadow); position:relative;
+      display:flex; flex-direction:column; gap:.9rem; align-items:center; text-align:center;
+    }
+    .badge{
+      display:inline-block; padding:.35rem .6rem; border-radius:999px; font-size:.78rem;
+      background: linear-gradient(90deg, color-mix(in oklab,var(--brand),transparent 70%), color-mix(in oklab,var(--brand-2),transparent 70%));
+      color:var(--text); border:1px solid color-mix(in oklab,var(--brand),transparent 60%); font-weight:600;
+      position:absolute; left:50%; transform:translateX(-50%); top:-12px;
+    }
+    .avatar{
+      width:160px; height:160px; border-radius:50%; overflow:hidden; border:4px solid rgba(91,156,255,0.12);
+      box-shadow: 0 6px 30px rgba(91,156,255,0.06); background: linear-gradient(180deg,var(--panel), color-mix(in oklab,var(--panel),white 4%));
+    }
+    .avatar img{ width:100%; height:100%; object-fit:cover; }
 
-    /* Sections */
+    /* Stats row in hero */
+    .stats{ display:flex; gap:1rem; margin-top:.6rem; flex-wrap:wrap; justify-content:center; }
+    .stat{ background:var(--glass); padding:.45rem .7rem; border-radius:12px; font-weight:600; color:var(--muted); font-size:.92rem; border:1px solid color-mix(in oklab,var(--text),transparent 94%); }
+
+    /* Section basic */
     section{ padding: clamp(2rem, 5vw, 4rem) 0; }
-    .section-title{ font-size: clamp(1.4rem, 3.5vw, 2rem); margin:0 0 1.2rem; }
-    .muted{ color: var(--muted); }
+    .section-title{
+      display:flex; align-items:end; gap:1rem; margin:0 0 1rem; font-size: clamp(1.35rem, 3.5vw, 2rem); font-weight:700;
+    }
+    .section-title::after{ content:''; display:block; height:6px; width:64px; border-radius:8px; background: linear-gradient(90deg,var(--brand),var(--brand-2)); margin-left:auto; opacity:.18; }
+
+    .muted{ color:var(--muted); }
 
     /* About */
-    .about{ display:grid; gap:1rem; grid-template-columns: 1fr 1fr; align-items:center; }
-    .about p{ margin:0; }
+    .about{ display:grid; gap:1.25rem; grid-template-columns: 1fr 380px; align-items:start; }
+    .about .card{ padding:1.15rem; border-radius:14px; background: linear-gradient(180deg,color-mix(in oklab,var(--panel),white 2%), var(--panel)); border:1px solid color-mix(in oklab,var(--text),transparent 88%); box-shadow:var(--shadow); }
+    .about .bio p{ margin:0 0 .75rem; color:var(--muted); }
+    .about .facts{ display:flex; flex-direction:column; gap:.6rem; }
 
     /* Projects */
-    .grid{ display:grid; gap:1rem; }
-    .projects .grid{ grid-template-columns: repeat(3, 1fr); }
-    .card{ background: linear-gradient(180deg, color-mix(in oklab, var(--panel), white 3%), var(--panel)); border:1px solid color-mix(in oklab, var(--text), transparent 88%); border-radius:18px; overflow:hidden; box-shadow: var(--shadow); display:flex; flex-direction:column; }
-    .card img{ height: 180px; object-fit: cover; }
-    .card .content{ padding:1rem; display:grid; gap:.6rem; }
-    .card .tags{ display:flex; flex-wrap:wrap; gap:.4rem; }
-    .tag{ font-size:.75rem; padding:.3rem .55rem; border-radius:999px; background: color-mix(in oklab, var(--brand-2), transparent 80%); border:1px solid color-mix(in oklab, var(--brand-2), transparent 60%); }
+    .projects .grid{ display:grid; gap:1rem; grid-template-columns: repeat(3, 1fr); }
+    .card{
+      background: linear-gradient(180deg, color-mix(in oklab,var(--panel),white 3%), var(--panel));
+      border-radius:14px; overflow:hidden; border:1px solid color-mix(in oklab,var(--text),transparent 88%); box-shadow:var(--shadow); display:flex; flex-direction:column;
+      transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+    }
+    .card:hover{ transform: translateY(-8px); box-shadow: 0 18px 50px rgba(0,0,0,.35); }
+    .card .thumb{ height:180px; background:#0f1724; display:block; overflow:hidden; }
+    .card .thumb img{ width:100%; height:100%; object-fit:cover; transform-origin:center; transition:transform .6s; }
+    .card:hover .thumb img{ transform: scale(1.06); }
+    .card .content{ padding:1rem; display:grid; gap:.5rem; }
+    .card h3{ margin:0; font-size:1.05rem; }
+    .card p{ margin:0; color:var(--muted); font-size:.95rem; }
+    .tags{ display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.6rem; }
+    .tag{ font-size:.78rem; padding:.32rem .55rem; border-radius:999px; background: color-mix(in oklab,var(--brand-2), transparent 80%); border:1px solid color-mix(in oklab,var(--brand-2), transparent 60%); font-weight:600; color:var(--panel); }
 
-    /* Skills */
-    .skills .grid{ grid-template-columns: repeat(4, 1fr); }
-    .pill{ padding:.65rem .8rem; border-radius:999px; border:1px dashed color-mix(in oklab, var(--text), transparent 80%); text-align:center; }
+    /* Experience: timeline */
+    .timeline{
+      position:relative;
+      padding-left:1rem;
+      margin-top:.6rem;
+    }
+    .timeline::before{
+      content:''; position:absolute; left:8px; top:0; bottom:0; width:3px; background: linear-gradient(180deg,var(--brand),var(--brand-2)); opacity:.12; border-radius:2px;
+    }
+    .timeline-item{
+      position:relative; padding: .85rem 1rem .85rem 2.6rem; margin-bottom:1.2rem; border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+      border:1px solid color-mix(in oklab,var(--text),transparent 92%);
+    }
+    .timeline-item::before{
+      content:''; position:absolute; left:-4px; top:calc(50% - 9px); width:18px; height:18px; border-radius:50%;
+      background:linear-gradient(180deg,var(--brand),var(--brand-2)); box-shadow:0 6px 18px rgba(91,156,255,.08);
+      border:3px solid var(--panel);
+    }
+    .timeline-item .row{ display:flex; gap:1rem; align-items:center; }
+    .timeline-item .logo { width:56px; height:56px; border-radius:10px; overflow:hidden; flex:0 0 56px; border:1px solid color-mix(in oklab,var(--text),transparent 92%); }
+    .timeline-item h3{ margin:0; font-size:1.05rem; color:var(--brand); }
+    .timeline-item .meta{ color:var(--muted); font-size:.92rem; }
+
+    /* Skills - grouped */
+    .skills-grid{ display:grid; gap:1rem; grid-template-columns: repeat(3, 1fr); }
+    .skill-group{ background: linear-gradient(180deg,color-mix(in oklab,var(--panel),white 2%), var(--panel)); border-radius:14px; padding:1rem; border:1px solid color-mix(in oklab,var(--text),transparent 88%); box-shadow:var(--shadow); }
+    .skill-group h4{ margin:.2rem 0 .6rem; font-size:1rem; }
+    .skill-list{ display:flex; flex-wrap:wrap; gap:.5rem; }
+    .skill-pill{ padding:.45rem .7rem; border-radius:999px; background: color-mix(in oklab,var(--brand-2), transparent 80%); border:1px solid color-mix(in oklab,var(--brand-2), transparent 60%); font-weight:600; font-size:.88rem; color:var(--panel); display:inline-flex; gap:.6rem; align-items:center; }
 
     /* Contact */
-    form{ display:grid; gap:.8rem; }
-    input, textarea{
-      width:100%; padding:.8rem 1rem; border-radius:12px; border:1px solid color-mix(in oklab, var(--text), transparent 86%);
-      background: var(--panel); color: var(--text);
-      outline:none; box-shadow: none;
-    }
-    input:focus, textarea:focus{ border-color: var(--brand); box-shadow: 0 0 0 6px var(--ring); }
-    textarea{ min-height: 140px; resize: vertical; }
+    .contact-wrap{ display:grid; grid-template-columns: 1fr 380px; gap:1rem; align-items:start; }
+    form.contact-form{ display:grid; gap:.75rem; padding:1rem; border-radius:14px; background: linear-gradient(180deg,color-mix(in oklab,var(--panel),white 2%), var(--panel)); border:1px solid color-mix(in oklab,var(--text),transparent 88%); box-shadow:var(--shadow); }
+    input, textarea, select{ width:100%; padding:.9rem 1rem; border-radius:12px; border:1px solid color-mix(in oklab,var(--text),transparent 86%); background: var(--panel); color:var(--text); outline:none; }
+    input:focus, textarea:focus{ border-color:var(--brand); box-shadow: 0 0 0 6px var(--ring); }
+    .contact-info{ padding:1rem; border-radius:14px; border:1px solid color-mix(in oklab,var(--text),transparent 88%); background: linear-gradient(180deg,color-mix(in oklab,var(--panel),white 2%), var(--panel)); }
 
     /* Footer */
-    footer{ border-top:1px solid color-mix(in oklab, var(--text), transparent 90%); padding:1rem 0 2rem; color: var(--muted); }
+    footer{ border-top:1px solid color-mix(in oklab,var(--text),transparent 90%); padding:1.2rem 0 3rem; color:var(--muted); margin-top:2rem; }
 
     /* Responsive */
     @media (max-width: 960px){
       .hero{ grid-template-columns: 1fr; }
-      .projects .grid{ grid-template-columns: repeat(2, 1fr); }
       .about{ grid-template-columns: 1fr; }
+      .projects .grid{ grid-template-columns: repeat(2, 1fr); }
+      .skills-grid{ grid-template-columns: repeat(2, 1fr); }
+      .contact-wrap{ grid-template-columns: 1fr; }
     }
     @media (max-width: 640px){
-      .nav ul{ display:none; }
-      .skills .grid{ grid-template-columns: repeat(2, 1fr); }
       .projects .grid{ grid-template-columns: 1fr; }
+      .skills-grid{ grid-template-columns: 1fr; }
+      .brand .text { display:none; }
+      .badge{ top:-10px; font-size:.78rem }
     }
+
+    /* small helpers */
+    .muted-sm{ color:var(--muted); font-size:.92rem; }
+    .socials{ display:flex; gap:.6rem; align-items:center; }
+    .socials a{ padding:.4rem .55rem; border-radius:10px; background:var(--glass); border:1px solid color-mix(in oklab,var(--text),transparent 92%); display:inline-flex; gap:.5rem; align-items:center; }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header>
-    <div class="container nav">
-      <a href="#home" class="brand">Daud</a>
-      <nav aria-label="Primary">
+    <div class="container nav" role="navigation" aria-label="Main navigation">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><img src="IMG_8879.jpeg" alt="Daud logo" style="width:100%;height:100%;object-fit:cover" /></div>
+        <div class="text">Daud</div>
+      </div>
+
+      <nav class="primary" aria-label="Primary">
         <ul>
           <li><a href="#about">About</a></li>
           <li><a href="#projects">Projects</a></li>
-          <li><a href="#Experience">Experience</a></li>
+          <li><a href="#experience">Experience</a></li>
           <li><a href="#skills">Skills</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </nav>
+
+      <div class="cta-mini">
+        <button class="btn-sm primary" onclick="location.href='#contact'">Hire Me</button>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Open menu"><i class="fa fa-bars"></i></button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" style="display:none; border-top:1px solid rgba(255,255,255,0.02); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));">
+      <div class="container" style="padding:.8rem 0;">
+        <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.5rem;">
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#experience">Experience</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
     </div>
   </header>
 
-  <!-- Hero -->
-  <main id="home" class="container">
+  <main class="container" id="home" tabindex="-1">
+    <!-- HERO -->
     <section class="hero" aria-labelledby="intro-title">
       <div>
-        <p class="eyebrow">Designer • Developer • Problem Solver • Freelancer • Data Scientist • Machine Learning Engineer</p>
-        <h1 id="intro-title">I build thoughtful, performance‑focused web experiences.</h1>
-        <p>I’m a software developer who enjoys turning complex ideas into clean, accessible interfaces. I have a passion for coding and learning 
-          new technologies, and I have completed multiple certifications in web development, Backend Development, Data Science, and version control. I have
-          a strong foundation in software development, and I continuously explore new frameworks and methodologies to enhance my skills and deliver innovative 
-          solutions. I enjoy working on complex challenges and turning them into elegant, efficient, 
-          and impactful software solutions that pushes boundaries and exceeds expectations. I'm looking for opportunities to collaborate with other
-professionals and contribute to exciting
-and meaningful projects.Below is a quick snapshot of my work and skills—everything on this page is built with only HTML & CSS.</p>
+        <p class="eyebrow">Designer • Developer • Problem Solver • Data Scientist • ML Engineer</p>
+        <h1 id="intro-title">I build thoughtful, performance-focused full-stack data products & web experiences.</h1>
+        <p class="lead">I combine production backend systems (Django, FastAPI), scalable ML pipelines, and front-end experiences to deliver data-driven products. My work focuses on reliability, performance, and clear interfaces that drive outcomes.</p>
+
         <div class="cta">
-          <a class="btn primary" href="#projects">View Projects</a>
-          <a class="btn" href="#contact">Contact Me</a>
+          <a class="btn primary" href="#projects"><i class="fa fa-briefcase" aria-hidden="true"></i> View Projects</a>
+          <a class="btn" href="#contact"><i class="fa fa-envelope" aria-hidden="true"></i> Contact Me</a>
+          <a class="btn" href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>
+        </div>
+
+        <div style="margin-top:1.1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+          <div class="stat">5+ years experience</div>
+          <div class="stat">Production ML & APIs</div>
+          <div class="stat">Open to freelance</div>
         </div>
       </div>
-      <aside class="hero-card">
+
+      <aside class="hero-card" aria-hidden="false">
         <div class="badge">Available for freelance</div>
         <div class="avatar" aria-hidden="true">
-          <img src="IMG_8879.jpeg" alt="Portrait placeholder" />
+          <img src="IMG_8879.jpeg" alt="Daud portrait" />
         </div>
-        <p class="muted" style="margin-top:.8rem">A picture of me at Microsoft.</p>
+        <p class="muted" style="margin-top:.6rem">A picture of me at Microsoft</p>
+        <div style="display:flex; gap:.6rem; margin-top:.6rem; align-items:center;">
+          <a class="socials" href="https://linkedin.com/" target="_blank" rel="noopener"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+          <a class="socials" href="https://github.com/" target="_blank" rel="noopener"><i class="fa fa-github" aria-hidden="true"></i></a>
+          <a class="socials" href="mailto:aquacodee@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+        </div>
       </aside>
     </section>
 
     <!-- About -->
-    <section id="about" class="about" aria-labelledby="about-title">
-      <div>
-        <h2 class="section-title" id="about-title">About</h2>
-        <p>Hi, I’m <strong>Daud</strong>. I focus on building smooth, fast websites with a strong emphasis on usability and clarity. I value clear communication, iteration, and little details that add up to great experiences.</p>
-      </div>
-      <div>
-        <p class="muted">When I’m not coding, I explore new technologies, work on side projects, and contribute to open-source initiatives. I’m also a member of the Microsoft Student Partners program, where I get to work with students and learn from their experiences. I’m always looking for new ways to grow my skills and knowledge, and I’m excited to see where my journey takes me next.</p>
+    <section id="about" aria-labelledby="about-title">
+      <div class="section-title" id="about-title">About</div>
+      <div class="about">
+        <div class="card bio">
+          <h3 style="margin-top:0">Hi, I’m <strong>Daud</strong>.</h3>
+          <p class="muted">I focus on building smooth, fast websites and production-ready data systems. I value clear communication, iteration, and detail. I build ML models, APIs, and frontends that are reliable and maintainable.</p>
+          <p class="muted">I’m experienced with Python, Django, FastAPI, React, Docker, and cloud deployments. I enjoy solving complex problems and translating them into robust, usable products.</p>
+          <div style="margin-top:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+            <div class="tag">Open to freelance</div>
+            <div class="tag">Remote-friendly</div>
+            <div class="tag">Available now</div>
+          </div>
+        </div>
+
+        <aside class="card facts">
+          <h4 style="margin:.2rem 0 .6rem">Snapshot</h4>
+          <div style="display:grid; gap:.6rem;">
+            <div style="display:flex; justify-content:space-between;"><strong>Location</strong><span class="muted-sm">Ghana</span></div>
+            <div style="display:flex; justify-content:space-between;"><strong>Role</strong><span class="muted-sm">Full Stack Data Scientist</span></div>
+            <div style="display:flex; justify-content:space-between;"><strong>Email</strong><a href="mailto:aquacodee@gmail.com" class="muted-sm">aquacodee@gmail.com</a></div>
+            <div style="display:flex; justify-content:space-between;"><strong>Resume</strong><a href="#" class="muted-sm">Download</a></div>
+          </div>
+        </aside>
       </div>
     </section>
 
     <!-- Projects -->
-    <section id="projects" class="projects" aria-labelledby="projects-title">
-      <h2 class="section-title" id="projects-title">Projects</h2>
-      <div class="grid">
-        <article class="card">
-          <img src="IMG_8879.jpeg" alt="Project screenshot placeholder"/>
-          <div class="content">
-            <h3>Project One</h3>
-            <p class="muted">A landing page for a SaaS product with a11y-first layout and optimized assets.</p>
-            <div class="tags">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS Grid</span>
-              <span class="tag">Responsive</span>
+    <section id="projects" aria-labelledby="projects-title">
+      <div class="section-title" id="projects-title">Projects</div>
+      <div class="projects">
+        <div class="grid">
+          <article class="card" tabindex="0" role="article">
+            <div class="thumb"><img src="IMG_8879.jpeg" alt="Project One screenshot" /></div>
+            <div class="content">
+              <h3>Real Estate Price Predictor</h3>
+              <p class="muted">A ML-driven predictor with a FastAPI backend, Dockerized deployment, and React frontend. Includes model explainability and CI/CD.</p>
+              <div class="tags">
+                <span class="tag">Python</span><span class="tag">FastAPI</span><span class="tag">Docker</span>
+              </div>
             </div>
-          </div>
-        </article>
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=1200&auto=format&fit=crop" alt="Project screenshot placeholder"/>
-          <div class="content">
-            <h3>Project Two</h3>
-            <p class="muted">A portfolio template with semantic HTML, dark mode support, and clean typography.</p>
-            <div class="tags">
-              <span class="tag">Semantics</span>
-              <span class="tag">Dark Mode</span>
-              <span class="tag">No JS</span>
+          </article>
+
+          <article class="card" tabindex="0" role="article">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=1200&auto=format&fit=crop" alt="Project Two screenshot" /></div>
+            <div class="content">
+              <h3>Portfolio Template</h3>
+              <p class="muted">A performance-first portfolio with dark mode, responsive design, and accessibility improvements.</p>
+              <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">a11y</span></div>
             </div>
-          </div>
-        </article>
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" alt="Project screenshot placeholder"/>
-          <div class="content">
-            <h3>Project Three</h3>
-            <p class="muted">A multi-section marketing site with flexible components and utility classes.</p>
-            <div class="tags">
-              <span class="tag">Flexbox</span>
-              <span class="tag">Accessibility</span>
-              <span class="tag">Performance</span>
+          </article>
+
+          <article class="card" tabindex="0" role="article">
+            <div class="thumb"><img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" alt="Project Three screenshot" /></div>
+            <div class="content">
+              <h3>Marketing Platform</h3>
+              <p class="muted">Multi-tenant marketing site with analytics, optimized assets, and flexible components.</p>
+              <div class="tags"><span class="tag">React</span><span class="tag">Node</span><span class="tag">Performance</span></div>
             </div>
-          </div>
-        </article>
+          </article>
+        </div>
       </div>
     </section>
 
     <!-- Experience -->
-    <section id="projects" class="projects" aria-labelledby="projects-title">
-      <h2 class="section-title" id="projects-title">Experience</h2>
-      <div class="grid">
-        <article class="card">
-          <img src="IMG_8879.jpeg" alt="Project screenshot placeholder"/>
-          <div class="content">
-            <h3>Company1 Name</h3>
-            <p class="muted">A landing page for a SaaS product with a11y-first layout and optimized assets.</p>
-            <div class="tags">
-              <span class="tag">HTML</span>
-              <span class="tag">CSS Grid</span>
-              <span class="tag">Responsive</span>
+    <section id="experience" aria-labelledby="exp-title">
+      <div class="section-title" id="exp-title">Experience</div>
+      <div class="timeline" role="list">
+        <div class="timeline-item" role="listitem" aria-label="2024 - Lead Data Scientist at SinuosityAI">
+          <div class="row">
+            <div class="logo"><img src="https://via.placeholder.com/80x80?text=S" alt="SinuosityAI logo" /></div>
+            <div>
+              <h3>Lead Data Scientist — SinuosityAI</h3>
+              <div class="meta">Jan 2024 — Present • Accra, Ghana</div>
+              <p class="muted" style="margin-top:.35rem">• Led drone data ingestion pipelines and ML models for crop analysis. • Deployed production APIs using Django & FastAPI. • Improved model throughput by 32%.</p>
             </div>
           </div>
-        </article>
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?q=80&w=1200&auto=format&fit=crop" alt="Project screenshot placeholder"/>
-          <div class="content">
-            <h3>Company2 Name</h3>
-            <p class="muted">A portfolio template with semantic HTML, dark mode support, and clean typography.</p>
-            <div class="tags">
-              <span class="tag">Semantics</span>
-              <span class="tag">Dark Mode</span>
-              <span class="tag">No JS</span>
+        </div>
+
+        <div class="timeline-item" role="listitem" aria-label="2022 - Data Scientist at Company2">
+          <div class="row">
+            <div class="logo"><img src="https://via.placeholder.com/80x80?text=M" alt="Company2 logo" /></div>
+            <div>
+              <h3>Data Scientist — Company2</h3>
+              <div class="meta">Aug 2021 — Dec 2023 • Remote</div>
+              <p class="muted" style="margin-top:.35rem">• Designed ML pipelines for forecasting and recommendations. • Built REST APIs and containerized services. • Mentored junior engineers.</p>
             </div>
           </div>
-        </article>
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1200&auto=format&fit=crop" alt="Project screenshot placeholder"/>
-          <div class="content">
-            <h3>Company3 Name</h3>
-            <p class="muted">A multi-section marketing site with flexible components and utility classes.</p>
-            <div class="tags">
-              <span class="tag">Flexbox</span>
-              <span class="tag">Accessibility</span>
-              <span class="tag">Performance</span>
+        </div>
+
+        <div class="timeline-item" role="listitem" aria-label="2019 - Software Engineer at Company1">
+          <div class="row">
+            <div class="logo"><img src="https://via.placeholder.com/80x80?text=C1" alt="Company1 logo" /></div>
+            <div>
+              <h3>Software Engineer — Company1</h3>
+              <div class="meta">Jun 2018 — Jul 2021 • Remote</div>
+              <p class="muted" style="margin-top:.35rem">• Built customer-facing web apps with React & Django. • Implemented CI/CD for deployment and tests.</p>
             </div>
           </div>
-        </article>
+        </div>
       </div>
     </section>
 
     <!-- Skills -->
-    <section id="skills" class="skills" aria-labelledby="skills-title">
-      <h2 class="section-title" id="skills-title">Skills</h2>
-      <div class="grid">
-        <div class="pill">HTML5</div>
-        <div class="pill">CSS3</div>
-        <div class="pill">JavaScript</div>
-        <div class="pill">Responsive Design</div>
-        <div class="pill">Reactjs</div>
-        <div class="pill">Performance</div>
-        <div class="pill">Git & GitHub</div>
-        <div class="pill">RESTful APIs</div>
-        <div class="pill">Elasticsearch</div>
-        <div class="pill">UI/UX Basics</div>
-        <div class="pill">SEO Basics</div>
-        <div class="pill">TailWind CSS</div>
-        <div class="pill">Python</div>
-        <div class="pill">FastAPI</div>
-        <div class="pill">Django</div>
-        <div class="pill">Flet</div>
-        <div class="pill">MySQL</div>
-        <div class="pill">PostgreSQL</div>
-        <div class="pill">SQLite</div>
-        <div class="pill">Csharp</div>
-        <div class="pill">ASP.NET</div>
-        <div class="pill">ASP.NET Core</div>
-        <div class="pill">Docker</div>
-        <div class="pill">Pandas</div>
-        <div class="pill">Numpy</div>
-        <div class="pill">Matplotlib</div>
-        <div class="pill">Seaborn</div>
-        <div class="pill">Scikit-learn</div>
-        <div class="pill">TensorFlow</div>
-        <div class="pill">Keras</div>
-        <div class="pill">Pytorch</div>
+    <section id="skills" aria-labelledby="skills-title">
+      <div class="section-title" id="skills-title">Skills</div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Programming & Tools</h4>
+          <div class="skill-list">
+            <div class="skill-pill"><i class="fa fa-python" aria-hidden="true"></i> Python</div>
+            <div class="skill-pill"><i class="fa fa-code" aria-hidden="true"></i> JavaScript</div>
+            <div class="skill-pill"><i class="fa fa-docker" aria-hidden="true"></i> Docker</div>
+            <div class="skill-pill"><i class="fa fa-git" aria-hidden="true"></i> Git</div>
+            <div class="skill-pill"><i class="fa fa-database" aria-hidden="true"></i> PostgreSQL</div>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h4>Data & ML</h4>
+          <div class="skill-list">
+            <div class="skill-pill"><i class="fa fa-brain" aria-hidden="true"></i> scikit-learn</div>
+            <div class="skill-pill"><i class="fa fa-cubes" aria-hidden="true"></i> TensorFlow</div>
+            <div class="skill-pill"><i class="fa fa-project-diagram" aria-hidden="true"></i> Model Pipelines</div>
+            <div class="skill-pill"><i class="fa fa-chart-line" aria-hidden="true"></i> EDA & Viz</div>
+            <div class="skill-pill"><i class="fa fa-server" aria-hidden="true"></i> Deployment</div>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <h4>Frontend & Backend</h4>
+          <div class="skill-list">
+            <div class="skill-pill"><i class="fa fa-react" aria-hidden="true"></i> React</div>
+            <div class="skill-pill"><i class="fa fa-server" aria-hidden="true"></i> Django</div>
+            <div class="skill-pill"><i class="fa fa-bolt" aria-hidden="true"></i> FastAPI</div>
+            <div class="skill-pill"><i class="fa fa-mobile-alt" aria-hidden="true"></i> Responsive Design</div>
+            <div class="skill-pill"><i class="fa fa-search" aria-hidden="true"></i> Elasticsearch</div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Contact -->
     <section id="contact" aria-labelledby="contact-title">
-      <h2 class="section-title" id="contact-title">Contact</h2>
-      <p class="muted">Send me a message and I'll get back to you as soon as possible.</p>
-      <form action="mailto:aquacodee@gmail.com" method="post" enctype="text/plain">
-        <label>
-          Name
-          <input type="text" name="name" placeholder="Your full name" required>
-        </label>
-        <label>
-          Email
-          <input type="email" name="email" placeholder="you@example.com" required>
-        </label>
-        <label>
-          Message
-          <textarea name="message" placeholder="Tell me about your project" required></textarea>
-        </label>
-        <button class="btn primary" type="submit">Send Message</button>
-      </form>
+      <div class="section-title" id="contact-title">Contact</div>
+      <div class="contact-wrap">
+        <form class="contact-form" action="mailto:aquacodee@gmail.com" method="post" enctype="text/plain" aria-label="Contact form">
+          <label>
+            <span class="muted-sm">Name</span>
+            <input type="text" name="name" placeholder="Your full name" required>
+          </label>
+          <label>
+            <span class="muted-sm">Email</span>
+            <input type="email" name="email" placeholder="you@example.com" required>
+          </label>
+          <label>
+            <span class="muted-sm">Message</span>
+            <textarea name="message" placeholder="Tell me about your project" required></textarea>
+          </label>
+          <div style="display:flex; gap:.6rem; justify-content:flex-end; margin-top:.4rem;">
+            <button class="btn" type="reset">Reset</button>
+            <button class="btn primary" type="submit">Send Message</button>
+          </div>
+        </form>
+
+        <aside class="contact-info">
+          <h4 style="margin-top:0">Let's talk</h4>
+          <p class="muted-sm">Prefer email? <a href="mailto:aquacodee@gmail.com">aquacodee@gmail.com</a></p>
+          <div style="margin-top:1rem;">
+            <strong>Social</strong>
+            <div style="margin-top:.6rem; display:flex; gap:.5rem;">
+              <a class="socials" href="https://linkedin.com/" target="_blank" rel="noopener"><i class="fa fa-linkedin" aria-hidden="true"></i> LinkedIn</a>
+              <a class="socials" href="https://github.com/" target="_blank" rel="noopener"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a>
+            </div>
+          </div>
+
+          <div style="margin-top:1rem;">
+            <strong>Quick links</strong>
+            <ul style="margin:.6rem 0 0; padding:0; list-style:none; display:grid; gap:.4rem;">
+              <li><a href="#projects">Work & Projects</a></li>
+              <li><a href="#experience">Experience</a></li>
+              <li><a href="#">Resume</a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
     </section>
   </main>
 
   <footer>
-    <div class="container">
-      <small>© <span id="y">2025</span> Your Name. Built with only HTML & CSS.</small>
+    <div class="container" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+      <small>© <span id="y"></span> Daud — Full Stack Data Scientist</small>
+      <div class="socials" aria-hidden="true">
+        <a href="https://github.com/" target="_blank" rel="noopener" aria-label="GitHub"><i class="fa fa-github"></i></a>
+        <a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+        <a href="mailto:aquacodee@gmail.com" aria-label="Email"><i class="fa fa-envelope"></i></a>
+      </div>
     </div>
   </footer>
 
-  <!-- Optional: update year without JS by just editing the text in #y when needed -->
+  <script>
+    // NOTE: Replace the FontAwesome kit id above (xxxx...) with your own kit or use the CSS CDN.
+    // Mobile menu toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileToggle?.addEventListener('click', () => {
+      if (!mobileMenu) return;
+      mobileMenu.style.display = mobileMenu.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        if (!href || href === '#') return;
+        if (href.startsWith('#')) {
+          e.preventDefault();
+          const el = document.querySelector(href);
+          if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+          // hide mobile menu after click
+          if (window.innerWidth < 760 && mobileMenu) mobileMenu.style.display = 'none';
+        }
+      });
+    });
+
+    // Set current year in footer
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Keyboard focus style improvement for accessible keyboard nav
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Tab') document.documentElement.classList.add('kbd-nav');
+    });
+
+    /* Optional: small intersection observer for reveal animations (progressive)
+       Keep minimal — removes inline JS if not desired.
+    */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.style.transform = 'none', entry.target.style.opacity = 1;
+      });
+    }, {threshold: .08});
+    document.querySelectorAll('.card, .timeline-item, .skill-group, .hero-card').forEach(el=>{
+      el.style.opacity = 0; el.style.transform = 'translateY(14px)'; el.style.transition = 'opacity .6s ease, transform .6s ease';
+      observer.observe(el);
+    });
+  </script>
 </body>
 </html>
